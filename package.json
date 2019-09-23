@@ -1,0 +1,27 @@
+{
+  "name": "ndoe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "co-redis": "^2.1.1",
+    "element-ui": "^2.12.0",
+    "js-md5": "^0.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.8.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-jwt": "^3.6.0",
+    "koa-redis": "^4.0.0",
+    "koa-router": "^7.4.0",
+    "koa-session": "^5.12.3",
+    "koa-static": "^5.0.0",
+    "mysql": "^2.17.1",
+    "qr-image": "^3.2.0",
+    "redis": "^2.8.0"
+  }
+}

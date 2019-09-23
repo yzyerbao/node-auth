@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>app 登陆</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+    <div id="app">
+        <el-form  v-if="!isLogin">
+            <el-form-item label="姓名">
+                <el-input v-model="name"></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input type="password" v-model="password"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="login">提交</el-button>
+            </el-form-item>
+        </el-form>
+        <div v-else>
+            登陆成功{{JSON.stringfy(userInfo)}}
+        </div>
+    </div>
+</body>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                password:'',
+                name:'',
+                isLogin: false,
+                userInfo:{}
+            }
+        },
+        methods: {
+            async login(){
+                let res = await axios.post(`/login`, {"name":this.name,"password":this.password});
+                if(res.code === 1){
+                    this.isLogin = true;
+                    this.userInfo = res.data;
+                }
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pc</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-row type="flex" class="row-bg" justify="center">
+        <el-col :span="8">
+            <el-card :body-style="{ padding: '0px' }" v-if='!isLogin'>
+                <img :src="qrImage" class="image">
+                <div style="padding: 14px;">
+                    <span>扫码登录</span>
+                </div>
+            </el-card>
+            <div v-else>
+                登录啦啦啦啦啦啦啦；
+            </div>
+        </el-col>
+    </el-row>
+
+</div>
+</body>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                isLogin: false,
+                qrCode: '',
+                qrImage: '',
+                timer: '',
+                userInfo:{}
+            }
+        },
+        methods: {
+            async getQRcode() {
+                let res = await axios.get("/qrcode");
+                this.qrCode = res.data.data;
+                this.qrImage = `/qrcode/${this.qrCode}`
+            },
+            async checkLogin() {
+                let res = await axios.get(`/user/${this.qrCode}`);
+                if (res.data.code === 1) {
+                    this.isLogin = true;
+                    localStorage.setItem("token", res.data.token);
+                    clearInterval(this.timer);
+                }
+            }
+        },
+        async created() {
+            if (localStorage.getItem("token")) {
+                this.isLogin = true;
+                return;
+            }
+            this.getQRcode();
+            this.timer = setInterval(()=> {
+                this.checkLogin();
+            }, 1000)
+        }
+    })
+</script>
+</html>

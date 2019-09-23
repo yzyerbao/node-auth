@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>pc</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-row v-if="status === 0">
+        <el-button type="primary" @click="login(1)">确认登录</el-button>
+        <el-button type="danger" @click='login(-1)'>拒绝登录</el-button>
+    </el-row>
+    <div v-else>
+        {{status === 1 ? '授权成功':'授权失败'}}
+    </div>
+</div>
+</body>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                status: 0,
+                code: location.search.split('=')[1]
+            }
+        },
+        methods: {
+            async login(status) {
+                //应该携带登录信息和二维码信息中的id;
+                if(status === 1)
+                {
+                    let res = await axios.post(`/login`, {code: this.code, userId: 1});
+                    if (res.data.code === 1) {
+                        this.status = status;
+                    }
+                    else{
+                        this.status = -1;
+                    }
+                } else {
+                    this.status = -1;
+                }
+            }
+        }
+    })
+</script>
+</html>
